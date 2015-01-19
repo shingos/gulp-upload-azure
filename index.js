@@ -25,26 +25,32 @@ module.exports = function(options) {
         throw new gutil.PluginError(PLUGIN_NAME, '`container` required');
     }
 
+    if (options.container.length === 0) {
+        throw new gutil.PluginError(PLUGIN_NAME, '`container` is empty');
+    }
     var fileCount = 0;
     var blobService = azure.createBlobService(options.account, options.key, options.host);
 
-    var createQueue = [];
-    var isCreated = false;
-    var isCreating = false;
-    var createContainer = function(cb) {
-        if (isCreated) {
+    var CONATAINERS = {};
+    var createContainer = function(containerName, cb) {
+        var self = CONATAINERS[containerName] = CONATAINERS[containerName] || {
+            createQueue: [],
+            isCreated: false,
+            isCreating: false,
+        };
+        if (self.isCreated) {
             return cb();
         }
-        createQueue.push(cb);
-        if (isCreating) {
+        self.createQueue.push(cb);
+        if (self.isCreating) {
             return;
         }
-        isCreating = true;
-        blobService.createContainerIfNotExists(options.container, function (err) {
-            createQueue.forEach(function (q) {
+        self.isCreating = true;
+        blobService.createContainerIfNotExists(containerName, function(err) {
+            self.createQueue.forEach(function(q) {
                 q(err);
             });
-            isCreated = true;
+            self.isCreated = true;
         });
     };
 
@@ -67,14 +73,23 @@ module.exports = function(options) {
         var self = this;
 
         var blobName = file.relative;
-        createContainer(function (err) {
+        var container = options.container;
+        if (container === '$root' && path.basename(blobName) !== blobName) {
+            container = blobName.split(path.sep)[0];
+            blobName = blobName.substr(container.length + path.sep.length);
+        }
+
+        if (options.verbose) {
+            gutil.log(PLUGIN_NAME, ':', chalk.green(' start '), blobName, container);
+        }
+        createContainer(container, function(err) {
             if (err) {
                 cb(new gutil.PluginError(PLUGIN_NAME, err, {
                     fileName: file.path
                 }));
                 return;
             }
-            blobService.createBlockBlobFromText(options.container, blobName, content, {
+            blobService.createBlockBlobFromText(container, blobName, content, {
                 contentType: mime.lookup(file.relative),
                 // contentEncoding: options.contentEncoding,
                 cacheControl: options.cacheControl
@@ -89,10 +104,6 @@ module.exports = function(options) {
                 cb(null, file);
             });
         });
-
-        if (options.verbose) {
-            gutil.log(PLUGIN_NAME, ':', chalk.green('✔ '), file.relative);
-        }
     }, function(cb) {
         if (fileCount > 0) {
             gutil.log(PLUGIN_NAME, ':', gutil.colors.green(fileCount, fileCount === 1 ? 'file' : 'files', 'uploaded successfully'));
