@@ -25,9 +25,10 @@ module.exports = function(options) {
         throw new gutil.PluginError(PLUGIN_NAME, '`container` required');
     }
 
-    if (options.container.length === 0) {
-        throw new gutil.PluginError(PLUGIN_NAME, '`container` is empty');
+    if (options.container.length < 3 || options.container.length > 63) {
+        throw new gutil.PluginError(PLUGIN_NAME, 'Container name must be between 3 and 63 characters long');
     }
+    
     var fileCount = 0;
     var blobService = azure.createBlobService(options.account, options.key, options.host);
 
