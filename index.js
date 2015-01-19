@@ -28,7 +28,7 @@ module.exports = function(options) {
     if (options.container.length < 3 || options.container.length > 63) {
         throw new gutil.PluginError(PLUGIN_NAME, 'Container name must be between 3 and 63 characters long');
     }
-    
+
     var fileCount = 0;
     var blobService = azure.createBlobService(options.account, options.key, options.host);
 
@@ -47,7 +47,9 @@ module.exports = function(options) {
             return;
         }
         self.isCreating = true;
-        blobService.createContainerIfNotExists(containerName, function(err) {
+        blobService.createContainerIfNotExists(containerName, {
+            publicAccessLevel: 'blob'
+        }, function(err) {
             self.createQueue.forEach(function(q) {
                 q(err);
             });
