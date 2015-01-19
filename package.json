@@ -1,6 +1,6 @@
 {
   "name": "gulp-upload-azure",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/zheng1/gulp-upload-azure",
   "dependencies": {
+    "async": "^0.9.0",
     "azure-storage": "^0.4.2",
     "chalk": "^0.5.1",
     "gulp-util": "^3.0.2",

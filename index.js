@@ -6,6 +6,7 @@ var assign = require('object-assign');
 var azure = require('azure-storage');
 var chalk = require('chalk');
 var mime = require('mime');
+var async = require('async');
 
 var PLUGIN_NAME = 'gulp-upload-azure';
 
@@ -47,14 +48,24 @@ module.exports = function(options) {
             return;
         }
         self.isCreating = true;
-        blobService.createContainerIfNotExists(containerName, {
-            publicAccessLevel: 'blob'
-        }, function(err) {
+        async.series([
+            function(callback) {
+                blobService.createContainerIfNotExists(containerName, function(err) {
+                    callback(err);
+                });
+            },
+            function(callback) {
+                blobService.setContainerAcl(containerName, null, 'blob', function(err) {
+                    callback(err);
+                });
+            }
+        ], function(err) {
             self.createQueue.forEach(function(q) {
                 q(err);
             });
             self.isCreated = true;
-        });
+        })
+
     };
 
     return through.obj(function(file, enc, cb) {
@@ -94,7 +105,7 @@ module.exports = function(options) {
             }
             blobService.createBlockBlobFromText(container, blobName, content, {
                 contentType: mime.lookup(file.relative),
-                // contentEncoding: options.contentEncoding,
+                contentEncoding: options.contentEncoding,
                 cacheControl: options.cacheControl
             }, function(error) {
                 if (error) {
