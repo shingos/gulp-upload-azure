@@ -59,6 +59,11 @@ module.exports = function(options) {
             return;
         }
 
+        var content = file.contents;
+        if (file.contents.length === 0) {
+            content = '';
+        }
+
         var self = this;
 
         var blobName = file.relative;
@@ -69,7 +74,7 @@ module.exports = function(options) {
                 }));
                 return;
             }
-            blobService.createBlockBlobFromText(options.container, blobName, file.contents, {
+            blobService.createBlockBlobFromText(options.container, blobName, content, {
                 contentType: mime.lookup(file.relative),
                 // contentEncoding: options.contentEncoding,
                 cacheControl: options.cacheControl
@@ -86,13 +91,13 @@ module.exports = function(options) {
         });
 
         if (options.verbose) {
-            gutil.log(PLUGIN_NAME + ' :', chalk.green('✔ ') + file.relative);
+            gutil.log(PLUGIN_NAME, ':', chalk.green('✔ '), file.relative);
         }
     }, function(cb) {
         if (fileCount > 0) {
-            gutil.log(PLUGIN_NAME + ' :', gutil.colors.green(fileCount, fileCount === 1 ? 'file' : 'files', 'uploaded successfully'));
+            gutil.log(PLUGIN_NAME, ':', gutil.colors.green(fileCount, fileCount === 1 ? 'file' : 'files', 'uploaded successfully'));
         } else {
-            gutil.log(PLUGIN_NAME + ' :', gutil.colors.yellow('No files uploaded'));
+            gutil.log(PLUGIN_NAME, ':', gutil.colors.yellow('No files uploaded'));
         }
         cb();
     });
