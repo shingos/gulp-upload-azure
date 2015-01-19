@@ -1,0 +1,35 @@
+{
+  "name": "gulp-upload-azure",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zheng1/gulp-upload-azure"
+  },
+  "keywords": [
+    "gulpplugin"
+  ],
+  "author": "zheng1",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zheng1/gulp-upload-azure/issues"
+  },
+  "homepage": "https://github.com/zheng1/gulp-upload-azure",
+  "dependencies": {
+    "azure-storage": "^0.4.2",
+    "chalk": "^0.5.1",
+    "gulp-util": "^3.0.2",
+    "mime": "^1.2.11",
+    "object-assign": "^2.0.0",
+    "through2": "^0.6.3"
+  },
+  "devDependencies": {
+    "assert": "^1.3.0",
+    "dotenv": "^0.4.0",
+    "mocha": "^2.1.0"
+  }
+}
