@@ -86,13 +86,13 @@ module.exports = function(options) {
         });
 
         if (options.verbose) {
-            gutil.log('gulp-ftp:', chalk.green('✔ ') + file.relative);
+            gutil.log(PLUGIN_NAME + ' :', chalk.green('✔ ') + file.relative);
         }
     }, function(cb) {
         if (fileCount > 0) {
-            gutil.log('gulp-ftp:', gutil.colors.green(fileCount, fileCount === 1 ? 'file' : 'files', 'uploaded successfully'));
+            gutil.log(PLUGIN_NAME + ' :', gutil.colors.green(fileCount, fileCount === 1 ? 'file' : 'files', 'uploaded successfully'));
         } else {
-            gutil.log('gulp-ftp:', gutil.colors.yellow('No files uploaded'));
+            gutil.log(PLUGIN_NAME + ' :', gutil.colors.yellow('No files uploaded'));
         }
         cb();
     });
