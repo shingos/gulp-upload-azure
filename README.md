@@ -1,6 +1,6 @@
 # gulp-upload-azure
 
-** Yet another gulp plugin for uploading files to Azure Blob Storage and set container Blob Public. **
+**Yet another gulp plugin for uploading files to Azure Blob Storage and set container Blob Public.**
 
 ## Options
 
