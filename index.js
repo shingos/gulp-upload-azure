@@ -48,18 +48,31 @@ module.exports = function(options) {
             return;
         }
         self.isCreating = true;
-        async.series([
-            function(callback) {
+        async.auto({
+            setServiceProperties: function(callback) {
+                blobService.setServiceProperties({
+                    Cors: {
+                        CorsRule: [{
+                            AllowedOrigins: ['*'],
+                            AllowedMethods: ['GET'],
+                            AllowedHeaders: [],
+                            ExposedHeaders: [],
+                            MaxAgeInSeconds: 60
+                        }]
+                    }
+                }, callback);
+            },
+            createContainerIfNotExists: function(callback) {
                 blobService.createContainerIfNotExists(containerName, function(err) {
                     callback(err);
                 });
             },
-            function(callback) {
+            setContainerAcl: ['createContainerIfNotExists', function(callback) {
                 blobService.setContainerAcl(containerName, null, 'blob', function(err) {
                     callback(err);
                 });
-            }
-        ], function(err) {
+            }]
+        }, function(err) {
             self.createQueue.forEach(function(q) {
                 q(err);
             });
