@@ -12,7 +12,7 @@ var PLUGIN_NAME = 'gulp-upload-azure';
 
 module.exports = function(options) {
     options = assign({}, options);
-    options.verbose = process.argv.indexOf('--verbose') !== -1;
+    options.verbose = options.verbose || (process.argv.indexOf('--verbose') !== -1);
 
     if (options.account === undefined) {
         throw new gutil.PluginError(PLUGIN_NAME, '`account` required');

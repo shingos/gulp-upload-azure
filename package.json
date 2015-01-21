@@ -1,7 +1,7 @@
 {
   "name": "gulp-upload-azure",
-  "version": "1.0.5",
-  "description": "",
+  "version": "1.0.6",
+  "description": "Yet another gulp plugin for uploading files to Azure Blob Storage and set container Blob Public.",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
@@ -11,7 +11,11 @@
     "url": "https://github.com/zheng1/gulp-upload-azure"
   },
   "keywords": [
-    "gulpplugin"
+    "gulpplugin",
+    "azure",
+    "upload",
+    "deploy",
+    "gulp"
   ],
   "author": "zheng1",
   "license": "MIT",
