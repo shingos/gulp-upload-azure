@@ -26,7 +26,7 @@
   "dependencies": {
     "async": "^0.9.0",
     "azure-storage": "^0.4.2",
-    "chalk": "^0.5.1",
+    "chalk": "^1.0.0",
     "gulp-util": "^3.0.2",
     "mime": "^1.2.11",
     "object-assign": "^2.0.0",
