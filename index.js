@@ -14,24 +14,24 @@ module.exports = function(options) {
     options = assign({}, options);
     options.verbose = options.verbose || (process.argv.indexOf('--verbose') !== -1);
 
-	var blobService = null;
+    var blobService = null;
     if(!!options.useDevelopmentStorage) {
-	    blobService = azure.createBlobService('useDevelopmentStorage=true');
-	}
+        blobService = azure.createBlobService('useDevelopmentStorage=true');
+    }
     else if(options.connectionString !== undefined) {
-	    blobService = azure.createBlobService(options.connectionString);
-	}
+        blobService = azure.createBlobService(options.connectionString);
+    }
     else {
-	    if (options.account === undefined) {
-	        throw new gutil.PluginError(PLUGIN_NAME, '`account` required');
-	    }
-	    if (options.key === undefined) {
-	        throw new gutil.PluginError(PLUGIN_NAME, '`key` required');
-	    }
+        if (options.account === undefined) {
+            throw new gutil.PluginError(PLUGIN_NAME, '`account` required');
+        }
+        if (options.key === undefined) {
+            throw new gutil.PluginError(PLUGIN_NAME, '`key` required');
+        }
 
-	    blobService = azure.createBlobService(options.account, options.key, options.host);
-	}
-    
+        blobService = azure.createBlobService(options.account, options.key, options.host);
+    }
+
     if (options.container === undefined) {
         throw new gutil.PluginError(PLUGIN_NAME, '`container` required');
     }
